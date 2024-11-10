@@ -1,0 +1,94 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: oklch(0% 0 0 / 40%);
+  backdrop-filter: blur(10px);
+  display: flex;
+  flex-direction: column;
+  z-index: 10;
+}
+
+.modal {
+  margin: 72px auto 0;
+  min-width: 256px;
+  height: calc(100vh - 144px);
+  background: var(--stone-100);
+  border-radius: 12px;
+  outline: none;
+  align-self: baseline;
+  overflow: auto;
+}
+
+.affordance {
+  background-color: var(--stone-400);
+  margin: 8px auto 0;
+  width: 48px;
+  height: 6px;
+  border-radius: 6px;
+}
+
+.dialog {
+  position: relative;
+  height: 100%;
+  padding: 28px;
+  outline: none;
+}
+
+.close {
+  display: block;
+  position: absolute;
+  cursor: pointer;
+  top: 12px;
+  right: 12px;
+  background-color: transparent;
+  border: 0 none;
+  outline: 0 none;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+}
+
+.close::before,
+.close::after {
+  top: 4px;
+  right: 10px;
+  position: absolute;
+  content: " ";
+  display: block;
+  height: 16px;
+  width: 2px;
+  border-radius: 2px;
+  background-color: var(--stone-400);
+  rotate: 45deg;
+}
+
+.close::after {
+  rotate: -45deg;
+}
+
+.modal.mobile {
+  min-width: unset;
+  max-height: initial;
+  overflow: initial;
+  width: 100%;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  position: relative;
+  flex: 1;
+  align-self: flex-end;
+}
+
+.modal.mobile::after {
+  content: " ";
+  display: block;
+  position: absolute;
+  background-color: inherit;
+  top: 100%;
+  left: 0;
+  right: 0;
+  height: 100%;
+}
+
+.modal.mobile .dialog {
+  height: 100%;
+}

@@ -1,0 +1,162 @@
+.heading {
+  margin: 0;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 1.5;
+}
+
+.headingCompleted {
+  color: var(--green);
+}
+
+.headingGameOver {
+  color: var(--red);
+}
+
+.group {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 8px;
+}
+
+.group p {
+  margin: 0;
+  line-height: 24px;
+  padding: 6px 12px;
+}
+
+.button,
+.action {
+  display: block;
+  padding: 0 24px;
+  line-height: 36px;
+  background-color: var(--primary);
+  border: 0 none;
+  border-radius: 36px;
+  color: var(--stone-50);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+}
+
+.action {
+  width: fit-content;
+  margin-top: auto;
+  border-radius: 8px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  gap: 8px;
+}
+
+.field > label,
+.field > span {
+  color: var(--stone-700);
+  font-weight: 500;
+  width: fit-content;
+}
+
+.field .input,
+.field .select {
+  display: block;
+  width: 100%;
+  color: var(--stone-900);
+  background-color: oklch(55.34% 0.012 58.07 / 5%);
+  border: 1px solid var(--stone-300);
+  border-radius: 10px;
+  box-shadow: 0px 8px 16px -10px oklch(21.61% 0.006 56.04 / 12%);
+  padding: 6px 12px;
+  line-height: 24px;
+}
+
+.field .select {
+  display: flex;
+  justify-content: space-between;
+}
+
+.field .select .chevron {
+  display: inline-block;
+  transform: translateY(-4px);
+  padding-left: 4px;
+  color: var(--stone-500);
+}
+
+.field .select[data-pressed] {
+  border-color: var(--stone-300);
+}
+
+.popover {
+  border: 1px solid var(--stone-200);
+  min-width: var(--trigger-width);
+  max-width: 250px;
+  box-sizing: border-box;
+  box-shadow: 0 8px 20px rgba(0 0 0 / 0.1);
+  border-radius: 6px;
+  background: var(--stone-100);
+  outline: none;
+}
+
+.listBox {
+  max-height: inherit;
+  overflow: auto;
+  padding: 2px;
+  outline: none;
+}
+
+.listBox .item {
+  margin: 2px;
+  padding: 0.286rem 0.571rem 0.286rem 1.571rem;
+  border-radius: 6px;
+  outline: none;
+  cursor: default;
+  color: var(--stone-900);
+  font-size: 1.072rem;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+
+  &[aria-selected="true"] {
+    font-weight: 600;
+
+    &::before {
+      content: "✓";
+      content: "✓" / "";
+      alt: " ";
+      position: absolute;
+      top: 4px;
+      left: 4px;
+    }
+  }
+
+  &[data-focused],
+  &[data-pressed] {
+    background: var(--stone-200);
+  }
+
+  [slot="label"] {
+    font-weight: 600;
+  }
+
+  [slot="description"] {
+    font-size: small;
+  }
+}
+
+.smallViewPortGroup {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 8px;
+}
+
+.smallViewPortGroup p {
+  margin: 0;
+  line-height: 24px;
+  padding: 6px 12px;
+}

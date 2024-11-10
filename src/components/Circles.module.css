@@ -1,0 +1,15 @@
+.container {
+  flex-grow: 1;
+}
+
+.container p {
+  margin: 0;
+}
+
+.boxContainer {
+  border: 1px solid var(--stone-300);
+  height: calc(100% - 8px);
+  margin-bottom: 8px;
+  border-radius: 12px;
+  position: relative;
+}

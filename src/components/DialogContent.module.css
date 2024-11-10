@@ -1,0 +1,11 @@
+.content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  gap: 24px;
+  padding-bottom: 12px;
+}
+
+.contentDesktop {
+  min-width: 360px;
+}
