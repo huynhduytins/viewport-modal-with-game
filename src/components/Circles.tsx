@@ -189,6 +189,14 @@ const Circles = ({
     return () => clearInterval(autoPlayIntervalRef?.current);
   }, [isAutoPlay]);
 
+  useEffect(() => {
+    if (gameStatus === GAME_STATUSES.GAME_OVER) {
+      for (let i = allTimersRef.current.length - 1; i >= 0; i--) {
+        clearInterval(allTimersRef.current[i]);
+      }
+    }
+  }, [gameStatus]);
+
   const handleClickCorrectNumber = (num: number) => {
     if (num === nextCircleShouldClick) {
       if (nextCircleShouldClick < numCircle) {
@@ -200,9 +208,6 @@ const Circles = ({
     } else if (num > nextCircleShouldClick) {
       clearInterval(autoPlayIntervalRef?.current);
       setGameStatus(GAME_STATUSES.GAME_OVER);
-      for (let i = allTimersRef.current.length - 1; i >= 0; i--) {
-        clearInterval(allTimersRef.current[i]);
-      }
     }
   };
 
@@ -242,9 +247,11 @@ const Circles = ({
       </motion.div>
       <p
         style={{
-          display: [GAME_STATUSES.COMPLETED, GAME_STATUSES.GAME_OVER].includes(
-            gameStatus
-          )
+          display: [
+            GAME_STATUSES.COMPLETED,
+            GAME_STATUSES.GAME_OVER,
+            GAME_STATUSES.NEW,
+          ].includes(gameStatus)
             ? "none"
             : "inline-block",
         }}

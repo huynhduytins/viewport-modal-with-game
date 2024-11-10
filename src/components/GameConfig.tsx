@@ -46,6 +46,7 @@ const GameConfig = ({
   handlePointChange,
 }: GameConfigProps) => {
   const [title, setTitle] = useState(TITLE.START);
+  const [isLimitTime, setIsLimitTime] = useState(false);
   const { time, handleClick, handleRestart, handleStop } = useTimer({
     increase: true,
   });
@@ -54,6 +55,7 @@ const GameConfig = ({
   const selectedLimitRef = useRef("unset");
 
   const handleSelectChange = (key: Key) => {
+    setIsLimitTime(false);
     selectedLimitRef.current = key as string;
   };
 
@@ -76,14 +78,15 @@ const GameConfig = ({
 
   useEffect(() => {
     if (
-      time &&
+      isLimitTime &&
       selectedLimitRef.current !== "unset" &&
       Number(selectedLimitRef.current) < Number(time)
     ) {
+      clearInterval(timeoutRef.current);
       setGameStatus(GAME_STATUSES.GAME_OVER);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [time]);
+  }, [isLimitTime, time]);
 
   return (
     <Fragment>
@@ -108,41 +111,43 @@ const GameConfig = ({
             onChange={handlePointChange}
           />
         </NumberField>
-        <Select
-          className={styles.field}
-          defaultSelectedKey="unset"
-          onSelectionChange={handleSelectChange}
-        >
-          <Label>Limit time</Label>
-          <Button className={styles.select}>
-            <SelectValue />
-            <span aria-hidden="true" className={styles.chevron}>
-              ⌄
-            </span>
-          </Button>
-          <Popover className={styles.popover}>
-            <ListBox className={styles.listBox}>
-              <ListBoxItem className={styles.item} id="unset">
-                unset
-              </ListBoxItem>
-              <ListBoxItem className={styles.item} id="10.0">
-                10.0s
-              </ListBoxItem>
-              <ListBoxItem className={styles.item} id="20.0">
-                20.0s
-              </ListBoxItem>
-              <ListBoxItem className={styles.item} id="50.0">
-                50.0s
-              </ListBoxItem>
-              <ListBoxItem className={styles.item} id="100.0">
-                100.0s
-              </ListBoxItem>
-              <ListBoxItem className={styles.item} id="200.0">
-                200.0s
-              </ListBoxItem>
-            </ListBox>
-          </Popover>
-        </Select>
+        {!isAutoPlay ? (
+          <Select
+            className={styles.field}
+            defaultSelectedKey="unset"
+            onSelectionChange={handleSelectChange}
+          >
+            <Label>Limit time</Label>
+            <Button className={styles.select}>
+              <SelectValue />
+              <span aria-hidden="true" className={styles.chevron}>
+                ⌄
+              </span>
+            </Button>
+            <Popover className={styles.popover}>
+              <ListBox className={styles.listBox}>
+                <ListBoxItem className={styles.item} id="unset">
+                  unset
+                </ListBoxItem>
+                <ListBoxItem className={styles.item} id="10.0">
+                  10.0s
+                </ListBoxItem>
+                <ListBoxItem className={styles.item} id="20.0">
+                  20.0s
+                </ListBoxItem>
+                <ListBoxItem className={styles.item} id="50.0">
+                  50.0s
+                </ListBoxItem>
+                <ListBoxItem className={styles.item} id="100.0">
+                  100.0s
+                </ListBoxItem>
+                <ListBoxItem className={styles.item} id="200.0">
+                  200.0s
+                </ListBoxItem>
+              </ListBox>
+            </Popover>
+          </Select>
+        ) : null}
         <TextField className={styles.field}>
           <Label>Time</Label>
           <p>{time}s</p>
@@ -154,6 +159,7 @@ const GameConfig = ({
             className={styles.action}
             onClick={() => {
               handleClick();
+              setIsLimitTime(true);
               setGameStatus(GAME_STATUSES.STARTING);
             }}
           >
@@ -165,9 +171,10 @@ const GameConfig = ({
               className={styles.action}
               onClick={() => {
                 handleRestart();
-                setGameStatus(GAME_STATUSES.RESTART);
-                clearTimeout(timeoutRef?.current);
                 setIsAutoPlay(false);
+                setIsLimitTime(true);
+                clearTimeout(timeoutRef?.current);
+                setGameStatus(GAME_STATUSES.RESTART);
                 setNumRestartGame((prev) => prev + 1);
               }}
             >
@@ -176,7 +183,10 @@ const GameConfig = ({
             {![TITLE.COMPLETED, TITLE.GAME_OVER].includes(title) ? (
               <button
                 className={styles.action}
-                onClick={() => setIsAutoPlay(isAutoPlay ? false : true)}
+                onClick={() => {
+                  selectedLimitRef.current = "unset";
+                  setIsAutoPlay(isAutoPlay ? false : true);
+                }}
               >
                 Auto Play: {isAutoPlay ? "OFF" : "ON"}
               </button>
