@@ -1,5 +1,13 @@
-import { Dispatch, MutableRefObject, useEffect, useRef, useState } from "react";
 import styles from "./Circles.module.css";
+
+import {
+  Dispatch,
+  MutableRefObject,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { GAME_STATUSES, RADIUS } from "../constants";
 import { useTimer } from "../hooks";
 import { motion } from "framer-motion";
@@ -143,7 +151,7 @@ const Circles = ({
   const allCirclesRef = useRef<Array<HTMLDivElement | null>>([]);
   const autoPlayIntervalRef = useRef<number | undefined>();
 
-  useEffect(() => {
+  const generateCircles = useCallback(() => {
     if (!boxRef.current || gameStatus === GAME_STATUSES.NEW) return;
 
     if ([GAME_STATUSES.STARTING, GAME_STATUSES.RESTART].includes(gameStatus)) {
@@ -164,31 +172,31 @@ const Circles = ({
           y += RADIUS - y;
         }
 
-        return {
-          x,
-          y,
-        };
+        return { x, y };
       });
       setCircles(circles);
       setResetKey((prev) => prev + 1);
       setNextCircleShouldClick(circles.length ? 1 : 0);
     }
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [gameStatus, boxRef, numRestartGame, isResizing]);
+  }, [boxRef, gameStatus, numRestartGame, isResizing]);
+
+  useEffect(() => {
+    generateCircles();
+  }, [generateCircles]);
 
   useEffect(() => {
     if (isAutoPlay && allCirclesRef.current.length) {
       autoPlayIntervalRef.current = setInterval(() => {
-        if (isAutoPlay && allCirclesRef?.current?.length) {
+        if (isAutoPlay && allCirclesRef.current.length) {
           allCirclesRef.current[0]?.click();
         } else {
-          clearInterval(autoPlayIntervalRef?.current);
+          clearInterval(autoPlayIntervalRef.current);
         }
       }, 1000);
     }
 
-    return () => clearInterval(autoPlayIntervalRef?.current);
+    return () => clearInterval(autoPlayIntervalRef.current);
   }, [isAutoPlay]);
 
   useEffect(() => {
@@ -208,7 +216,7 @@ const Circles = ({
         setGameStatus(GAME_STATUSES.COMPLETED);
       }
     } else if (num > nextCircleShouldClick) {
-      clearInterval(autoPlayIntervalRef?.current);
+      clearInterval(autoPlayIntervalRef.current);
       setGameStatus(GAME_STATUSES.GAME_OVER);
     }
   };
