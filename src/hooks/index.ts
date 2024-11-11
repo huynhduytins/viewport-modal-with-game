@@ -1,9 +1,15 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { CircleData, ResponsiveBreakpoint, ResponsiveInfo } from "../types";
-import { IS_BROWSER, RESPONSIVE_CONFIG, SUBSCRIBERS } from "../constants";
+import {
+  IS_BROWSER,
+  RESIZE_DEBOUNCE_MS,
+  RESPONSIVE_CONFIG,
+  SUBSCRIBERS,
+} from "../constants";
 
 let listening = false;
 let info: ResponsiveInfo;
+let resizeTimeout: ReturnType<typeof setTimeout> | null = null;
 
 function handleResize() {
   const oldInfo = info;
@@ -34,11 +40,20 @@ function useResponsive() {
   if (IS_BROWSER && !listening) {
     info = {} as ResponsiveInfo;
     calculate();
-    window.addEventListener("resize", handleResize);
+    window.addEventListener("resize", () => {
+      setIsResizing(true);
+      if (resizeTimeout) clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        handleResize();
+        setIsResizing(false);
+      }, RESIZE_DEBOUNCE_MS);
+      handleResize();
+    });
     listening = true;
   }
 
   const [state, setState] = useState<ResponsiveInfo>(info);
+  const [isResizing, setIsResizing] = useState(false);
 
   useEffect(() => {
     if (!IS_BROWSER) return;
@@ -56,13 +71,14 @@ function useResponsive() {
     return () => {
       SUBSCRIBERS.delete(subscriber);
       if (SUBSCRIBERS.size === 0) {
+        if (resizeTimeout) clearTimeout(resizeTimeout);
         window.removeEventListener("resize", handleResize);
         listening = false;
       }
     };
   }, []);
 
-  return state;
+  return { state, isResizing };
 }
 
 function useTimer({ increase }: { increase?: boolean }) {

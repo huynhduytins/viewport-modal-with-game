@@ -10,9 +10,11 @@ import GameConfig from "./GameConfig";
 export default function DialogContent({
   isSmallViewPort,
   responsivePoint,
+  isResizing,
 }: {
   isSmallViewPort: boolean;
   responsivePoint: ResponsiveInfo;
+  isResizing: boolean;
 }) {
   const [point, setPoint] = useState(0);
   const [gameStatus, setGameStatus] = useState<GAME_STATUSES>(
@@ -68,6 +70,7 @@ export default function DialogContent({
         boxRef={boxRef}
         numCircle={point}
         boxWidth={boxWidth}
+        isResizing={isResizing}
         gameStatus={gameStatus}
         isAutoPlay={isAutoPlay}
         setGameStatus={setGameStatus}

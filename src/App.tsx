@@ -18,10 +18,11 @@ function App() {
             </button>
           )}
         >
-          {({ isSmallViewPort, responsivePoint }) => (
+          {({ isSmallViewPort, responsivePoint, isResizing }) => (
             <DialogContent
               isSmallViewPort={isSmallViewPort}
               responsivePoint={responsivePoint}
+              isResizing={isResizing}
             />
           )}
         </Dialog>

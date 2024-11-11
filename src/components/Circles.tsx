@@ -116,22 +116,24 @@ interface CirclesProps {
   boxWidth: number;
   numCircle: number;
   isAutoPlay: boolean;
+  isResizing: boolean;
   numRestartGame: number;
+  gameStatus: GAME_STATUSES;
   responsivePoint: ResponsiveInfo;
   boxRef: MutableRefObject<HTMLDivElement | null>;
-  gameStatus: GAME_STATUSES;
   setGameStatus: Dispatch<React.SetStateAction<GAME_STATUSES>>;
 }
 
 const Circles = ({
-  numCircle,
   boxRef,
-  responsivePoint,
   boxWidth,
+  numCircle,
+  isResizing,
   gameStatus,
+  isAutoPlay,
   setGameStatus,
   numRestartGame,
-  isAutoPlay,
+  responsivePoint,
 }: CirclesProps) => {
   const [circles, setCircles] = useState<CircleData[]>([]);
   const [nextCircleShouldClick, setNextCircleShouldClick] = useState(0);
@@ -173,7 +175,7 @@ const Circles = ({
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [gameStatus, boxRef, numRestartGame]);
+  }, [gameStatus, boxRef, numRestartGame, isResizing]);
 
   useEffect(() => {
     if (isAutoPlay && allCirclesRef.current.length) {

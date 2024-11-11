@@ -53,6 +53,7 @@ type Props = Omit<DialogTriggerProps, "children"> & {
   children: (opts: {
     isSmallViewPort: boolean;
     responsivePoint: ResponsiveInfo;
+    isResizing: boolean;
   }) => React.ReactNode;
 };
 
@@ -61,7 +62,7 @@ export const Dialog: React.FC<Props> = ({ children, target, ...props }) => {
   const isOpen = props?.isOpen || _isOpen;
   const setOpen = props?.onOpenChange || _setOpen;
 
-  const responsive = useResponsive();
+  const { state: responsive, isResizing } = useResponsive();
   const isSmallViewPort = !responsive.md;
 
   // Turn Dialog into Drawer on mobile viewport
@@ -126,7 +127,11 @@ export const Dialog: React.FC<Props> = ({ children, target, ...props }) => {
                 {({ close }) => (
                   <Fragment>
                     <button className={styles.close} onClick={close} />
-                    {children({ isSmallViewPort, responsivePoint: responsive })}
+                    {children({
+                      isSmallViewPort,
+                      responsivePoint: responsive,
+                      isResizing,
+                    })}
                   </Fragment>
                 )}
               </DialogContent>

@@ -36,6 +36,7 @@ const TITLE = {
 const SUBSCRIBERS = new Set<Subscriber>();
 
 const RADIUS = 25;
+const RESIZE_DEBOUNCE_MS = 200;
 
 enum GAME_STATUSES {
   NEW = "new",
@@ -53,5 +54,6 @@ export {
   GAME_STATUSES,
   RESPONSIVE_CONFIG,
   STATIC_TRANSITION,
+  RESIZE_DEBOUNCE_MS,
   INERTIA_TRANSACTION,
 };
