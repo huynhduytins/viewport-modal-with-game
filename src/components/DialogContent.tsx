@@ -1,6 +1,6 @@
 import styles from "./DialogContent.module.css";
 
-import { ChangeEvent, useMemo, useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { GAME_STATUSES, RESPONSIVE_CONFIG } from "../constants";
 import { ResponsiveConfig, ResponsiveInfo } from "../types";
 
@@ -16,7 +16,7 @@ export default function DialogContent({
   responsivePoint: ResponsiveInfo;
   isResizing: boolean;
 }) {
-  const [point, setPoint] = useState(0);
+  const [numCircles, setNumCircles] = useState(0);
   const [gameStatus, setGameStatus] = useState<GAME_STATUSES>(
     GAME_STATUSES.NEW
   );
@@ -38,17 +38,6 @@ export default function DialogContent({
     ];
   }, [responsivePoint]);
 
-  const handlePointChange = (e: ChangeEvent<HTMLInputElement>) => {
-    // values that are not positive integers are not allowed
-    const value = parseInt(e.target.value.replace(/[^\d]/, ""));
-
-    if (isNaN(value)) {
-      setPoint(0);
-    } else if (value !== 0) {
-      setPoint(value);
-    }
-  };
-
   return (
     <div
       className={[
@@ -57,19 +46,18 @@ export default function DialogContent({
       ].join(" ")}
     >
       <GameConfig
-        point={point}
         gameStatus={gameStatus}
         isAutoPlay={isAutoPlay}
         setIsAutoPlay={setIsAutoPlay}
         setGameStatus={setGameStatus}
+        setNumCircles={setNumCircles}
         isSmallViewPort={isSmallViewPort}
         setNumRestartGame={setNumRestartGame}
-        handlePointChange={handlePointChange}
       />
       <Circles
         boxRef={boxRef}
-        numCircle={point}
         boxWidth={boxWidth}
+        numCircle={numCircles}
         isResizing={isResizing}
         gameStatus={gameStatus}
         isAutoPlay={isAutoPlay}

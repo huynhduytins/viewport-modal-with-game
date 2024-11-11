@@ -25,27 +25,27 @@ import {
 import { GAME_STATUSES, TITLE } from "../constants";
 
 interface GameConfigProps {
-  point: number;
   isAutoPlay: boolean;
   gameStatus: GAME_STATUSES;
   isSmallViewPort?: boolean;
+  setNumCircles: Dispatch<React.SetStateAction<number>>;
   setIsAutoPlay: Dispatch<React.SetStateAction<boolean>>;
   setNumRestartGame: Dispatch<React.SetStateAction<number>>;
-  handlePointChange: (e: ChangeEvent<HTMLInputElement>) => void;
   setGameStatus: Dispatch<React.SetStateAction<GAME_STATUSES>>;
 }
 
 const GameConfig = ({
-  point,
   gameStatus,
   isAutoPlay,
   setIsAutoPlay,
   setGameStatus,
   isSmallViewPort,
   setNumRestartGame,
-  handlePointChange,
+  setNumCircles,
 }: GameConfigProps) => {
+  const [point, setPoint] = useState(0);
   const [title, setTitle] = useState(TITLE.START);
+
   const [isLimitTime, setIsLimitTime] = useState(false);
   const { time, handleClick, handleRestart, handleStop } = useTimer({
     increase: true,
@@ -53,6 +53,17 @@ const GameConfig = ({
 
   const timeoutRef = useRef<number | undefined>();
   const selectedLimitRef = useRef("unset");
+
+  const handlePointChange = (e: ChangeEvent<HTMLInputElement>) => {
+    // values that are not positive integers are not allowed
+    const value = parseInt(e.target.value.replace(/[^\d]/, ""));
+
+    if (isNaN(value)) {
+      setPoint(0);
+    } else if (value !== 0) {
+      setPoint(value);
+    }
+  };
 
   const handleSelectChange = (key: Key) => {
     setIsLimitTime(false);
@@ -159,6 +170,7 @@ const GameConfig = ({
             className={styles.action}
             onClick={() => {
               handleClick();
+              setNumCircles(point);
               setIsLimitTime(true);
               setGameStatus(GAME_STATUSES.STARTING);
             }}
@@ -173,6 +185,7 @@ const GameConfig = ({
                 handleRestart();
                 setIsAutoPlay(false);
                 setIsLimitTime(true);
+                setNumCircles(point);
                 clearTimeout(timeoutRef?.current);
                 setGameStatus(GAME_STATUSES.RESTART);
                 setNumRestartGame((prev) => prev + 1);

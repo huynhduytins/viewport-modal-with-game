@@ -143,9 +143,9 @@ const Circles = ({
   numRestartGame,
   responsivePoint,
 }: CirclesProps) => {
+  const [resetKey, setResetKey] = useState(0); // Unique key for re-render circles when restart game
   const [circles, setCircles] = useState<CircleData[]>([]);
   const [nextCircleShouldClick, setNextCircleShouldClick] = useState(0);
-  const [resetKey, setResetKey] = useState(0); // Unique key for re-render circles when restart game
 
   const allTimersRef = useRef<Array<number | undefined>>([]);
   const allCirclesRef = useRef<Array<HTMLDivElement | null>>([]);
