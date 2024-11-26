@@ -60,10 +60,10 @@ const GameConfig = ({
 
     if (isNaN(value)) {
       setPoint(0);
-    } else if (value !== 0 && value <= 2000) {
+    } else if (value !== 0 && value <= 1000) {
       setPoint(value);
-    } else if(value > 2000) {
-      setPoint(2000);
+    } else if(value > 1000) {
+      setPoint(1000);
     }
   };
 
