@@ -7,10 +7,10 @@ function App() {
     <main>
       <div className={styles.container}>
         <h1 className={styles.heading}>
-          <img src="./logo.png" className={styles.logo} />
-          <span className={styles.cheers}>Bubbles Cheers!!!</span>
+          <img src='./logo.svg' className={styles.logo}/>
+          <span className={styles.cheers}>バブル乾杯</span>
         </h1>
-        <div className={styles.desc}>a game for entrance test</div>
+        <div className={styles.desc}>a game with modern dialog</div>
         <Dialog
           target={({ open }) => (
             <button className={styles.button} onClick={open}>
